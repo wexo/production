@@ -41,7 +41,8 @@ class SystemInstallCommand extends Command
         $this->addOption('create-database', null, InputOption::VALUE_NONE, "Create database if it doesn't exist.")
             ->addOption('drop-database', null, InputOption::VALUE_NONE, 'Drop existing database')
             ->addOption('basic-setup', null, InputOption::VALUE_NONE, 'Create storefront sales channel and admin user')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force install even if install.lock exists');
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force install even if install.lock exists')
+            ->addOption('locale', 'l', InputOption::VALUE_OPTIONAL, 'Shop locale in ISO format', 'en-GB');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -121,6 +122,10 @@ class SystemInstallCommand extends Command
                 'command' => 'database:migrate-destructive',
                 'identifier' => 'core',
                 '--all'  => true,
+            ],
+            [
+                'command' => 'locale:change-default',
+                'locale' => $input->getOption('locale'),
             ],
             [
                 'command' => 'dal:refresh:index'
